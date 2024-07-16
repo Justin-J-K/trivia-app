@@ -1,4 +1,5 @@
 "use client"
+import GameOverModal from "@/components/game-over-modal";
 import Score from "@/components/score";
 import Scoreboard from "@/components/scoreboard";
 import Link from "next/link";
@@ -15,14 +16,16 @@ export default function Home() {
   }, []);
 
   return (
-    <main>
-      <Score score={bestScore} isBest={true} />
-      <Link href={"/game"}>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Start Game
-        </button>
-      </Link>
+    <div className="flex flex-col gap-16 w-full">
+      <div className="flex flex-col gap-4 items-center">
+        <Score score={bestScore} isBest={true} />
+        <Link href={"/game"}>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Start Game
+          </button>
+        </Link>
+      </div>
       <Scoreboard />
-    </main>
+    </div>
   );
 }
