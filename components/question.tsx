@@ -18,6 +18,8 @@ export default function Question({ incrementScore, endGame }: QuestionProps) {
     }, []);
 
     const handleAnswer = (selectedAnswer: boolean) => {
+        if (!questions) return;
+
         setAnswered(true);
 
         if (selectedAnswer == (questions[currentQuestion].correct_answer === "True")) {
@@ -68,9 +70,13 @@ export default function Question({ incrementScore, endGame }: QuestionProps) {
         setAnswered(false);
     }
 
+    const replaceEscapedHTML = (text: string): string => {
+        return text.replaceAll("&quot;", '"').replaceAll("&#039;", "'");
+    }
+
     return (
         <div className="flex flex-col items-center gap-4">
-            <p className="text-center">{question}</p>
+            <p className="text-center">{replaceEscapedHTML(question)}</p>
             <div className="flex justify-center gap-4">
                 <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded" onClick={() => handleAnswer(true)} disabled={gameEnded || answered}>True</button>
                 <button className="bg-red-500 text-white font-bold py-2 px-4 rounded" onClick={() => handleAnswer(false)} disabled={gameEnded || answered}>False</button>

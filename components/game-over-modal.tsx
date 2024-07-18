@@ -15,14 +15,14 @@ export default function GameOverModal({open, score}: GameOverModalProps) {
         localStorage.setItem("name", name);
 
         const bestScore = localStorage.getItem("bestScore");
-        if (bestScore == null || score <= Number(bestScore)) {
+        if ((bestScore != null && score <= Number(bestScore)) || name.trim() === "") {
             router.push("/");
             return;
         }
 
         localStorage.setItem("bestScore", score.toString());
-
-        fetch("/api/add", {
+        
+        fetch(process.env.NEXT_PUBLIC_API_URL + "/api/add/", {
             method: "PUT",
             body: JSON.stringify({ name, score }),
             headers: {
@@ -36,10 +36,14 @@ export default function GameOverModal({open, score}: GameOverModalProps) {
         router.push("/");
     };
 
+    const filterName = (name: string): string => {
+        return name.replace(/[^a-zA-Z\s]/g, "").substring(0, 20);
+    };
+
     useEffect(() => {
         const savedName = localStorage.getItem("name");
         if (savedName) {
-            setName(savedName);
+            setName(filterName(savedName));
         }
     }, [])
 
@@ -52,7 +56,7 @@ export default function GameOverModal({open, score}: GameOverModalProps) {
                         <input
                             type="text"
                             value={name}
-                            onChange={event => setName(event.target.value)}
+                            onChange={event => setName(filterName(event.target.value))}
                             placeholder="Enter your name"
                             className="border border-gray-300 rounded px-4 py-2 mb-4"
                         />

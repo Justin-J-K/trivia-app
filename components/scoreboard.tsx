@@ -9,9 +9,9 @@ export default function Scoreboard() {
     const [scores, setScores] = useState<Score[]>([]);
 
     useEffect(() => {
-        fetch("/api/top")
+        fetch(process.env.NEXT_PUBLIC_API_URL + "/api/top")
             .then(response => response.json())
-            .then(data => setScores(data))
+            .then(data => setScores(data.scores))
             .catch(error => console.error(error));
     }, []);
 
